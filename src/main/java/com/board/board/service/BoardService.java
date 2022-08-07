@@ -3,9 +3,15 @@ package com.board.board.service;
 import com.board.board.entity.Board;
 import com.board.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BoardService {
@@ -14,14 +20,28 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     //글 작성 처리
-    public void write(Board board){
-        boardRepository.save(board);
+    public void write(Board board, MultipartFile file) throws Exception{
 
+        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\staticfiles\\files";
+
+        UUID uuid = UUID.randomUUID();
+
+        String fileName = uuid + "_" + file.getOriginalFilename();
+
+        File saveFile = new File(projectPath, fileName);
+
+        file.transferTo(saveFile);
+
+        board.setFilename(fileName);
+        board.setFilepath("/files/" + fileName);
+
+        boardRepository.save(board);
     }
 
     //게시글 리스트 처리
-    public List<Board> boardList(){
-        return boardRepository.findAll();
+    public Page<Board> boardList(Pageable pageable){
+
+        return boardRepository.findAll(pageable);
     }
 
     //특정 게시글 불러오기
@@ -33,6 +53,19 @@ public class BoardService {
     //특정게시글삭제
 
     public void boarddelete(Integer id){
+
         boardRepository.deleteById(id);
+
     }
+
+    //검색
+    public Page<Board> boardSearchList(String searchkeyword, Pageable pageable){
+        return boardRepository.findByTitleContaining(searchkeyword, pageable);
+    }
+
+
 }
+//서비스는 인터페이스의 기능을 셋팅하는 부분
+// 컨트롤은 데이터와 기능을 실제로 수행하는 부분
+// 리포지토리는 인터페이스 셋팅
+// 엔티티는
