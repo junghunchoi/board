@@ -39,6 +39,8 @@ public class Controller {
 
         return "message";
     }
+
+
     @GetMapping("/board/list")
     public String boardList(Model model,
                             @PageableDefault(page = 0, size= 10, direction = Sort.Direction.DESC) Pageable pageable
@@ -62,6 +64,8 @@ public class Controller {
         model.addAttribute("endPage", endPage);
         return "boardlist";
     }
+
+
     @GetMapping("/board/view") // localhost:8080/board/view?id=1 이렇게 넘긴다
     public String boardview(Model model, Integer id){
 

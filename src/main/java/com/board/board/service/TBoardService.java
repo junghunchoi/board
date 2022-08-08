@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 @Service
-public class BoardService {
+public class TBoardService {
+
 
     @Autowired
     private BoardRepository boardRepository;
@@ -41,28 +40,27 @@ public class BoardService {
     //게시글 리스트 처리
     public Page<Board> boardList(Pageable pageable){
 
-        return boardRepository.findAll(pageable);
+
     }
 
     //특정 게시글 불러오기
     public Board boardview(Integer id){
 
-        return boardRepository.findById(id).get();
+
     }
 
     //특정게시글삭제
 
     public void boarddelete(Integer id){
 
-        boardRepository.deleteById(id);
+
 
     }
 
     //검색
     public Page<Board> boardSearchList(String searchkeyword, Pageable pageable){
-        return boardRepository.findByTitleContaining(searchkeyword, pageable);
+
     }
 
 
 }
-

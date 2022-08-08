@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BoardRepository extends JpaRepository<Board,Integer> {
     Page<Board> findByTitleContaining(String searchKeyword, Pageable pageable);
+
 }
